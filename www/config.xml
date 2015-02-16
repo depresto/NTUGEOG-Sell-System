@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+		xmlns:gap = "http://phonegap.com/ns/1.0"
+		id        = "com.waynehuang.ntugeog.sellsystem"
+		version   = "1.0.0">
+
+	<name>NTU GEOG Sell System</name>
+
+	<description>
+		Sell System for NTU GEOG design by Wayne Huang.
+	</description>
+
+	<author href="https://www.facebook.com/Wayne.Huang.g" email="wayne123tw@gmail.com">
+		Wayne Huang 黃文鴻
+	</author>
+
+	<preference name="target-device" value="universal" />
+
+	<icon src="icon.png"/>
+</widget>
+<gap:platform name="android" />

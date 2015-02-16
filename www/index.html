@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sell System By Wayne Huang</title>
+	<link rel="stylesheet" href="css/jquery.mobile.flatui.min.css">
+	<script src="js/jquery-2.1.3.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script src="js/jquery.csv-0.71.min.js"></script>
+	<script src="js/main.js"></script>
+	<script type="text/javascript">
+		getData();
+	</script>
+	<style>
+		#sold {
+			width: 90%;
+			margin-left: 5%;
+			height: 40px;
+			margin-top: 10px;
+		}
+		#button_bar {
+			width: 90%;
+			margin-left: 5%;
+		}
+		#button_bar button {
+			margin-right: 1px;
+		}
+		#list_selected {
+			margin-bottom: 10px;
+		}
+		#list_selected li {
+			background: #16a085;
+			color: #fff;
+			border-color: #fff;
+		}
+		#list_selected .ui-li-count {
+			border-color: #fff;
+		}
+		.del-button {
+			float: left;
+		}
+		#list_selected li div {
+			float: right;
+		}
+		#list_selected .ui-btn {
+			background: #16a085;
+			border-color: #16a085;
+		}
+		#list_selected .ui-btn:hover {
+			background: #1abc9c;
+			border-color: #1abc9c;
+		}
+		#list_selected .ui-btn:active {
+			background: #1abc9c;
+			border-color: #1abc9c;
+		}
+		.ui-li-link-alt-left {
+			left: 0;
+			right: auto;
+		}
+		.ul-li-has-alt-left {
+			padding-right: auto !important;
+			padding-left: 48px !important;
+		}
+		.ui-listview>li.ui-li-has-alt>.ui-btn {
+			margin-right: 0;
+		}
+		#dialog div h1 {
+			text-align: center;
+		}
+		#footer-div-enter-inv {
+			width: 90%;
+			position: relative;
+		}
+		.button-enter-inv {
+			width: 90%;
+			margin-left: 5%;
+		}
+		.ui-input-text input {
+			text-align: right;
+		}
+		#dialog-about div h1,#dialog-about div h2 {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div data-role="page" >
+		<header data-role="header">
+			<h1>地理週</h1>
+		</header>
+		<div data-role="content">
+			<ul id="list_selected" data-role="listview" data-split-theme="b" data-split-icon="delete">
+
+			</ul>
+			<ul id="list_inv" data-role="listview" data-filter="true" data-filter-placeholder="搜尋">
+				<li class="list_title" data-role="list-divider">項目<div class="ui-li-count">庫存</div></li>
+			</ul>
+			<a id='submitted' href="#dialog" data-rel="dialog" data-transition="pop" style='display:none;'></a>
+		</div>
+		<footer data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<button id="sold" data-theme="d">售出</button>
+			<div id="button_bar" data-role="controlgroup" data-type="horizontal">
+				<a data-role="button" data-theme="f" data-icon="plus" href="#set-inv" data-transition="flip" id="footer-button-enter-inv">輸入庫存</a>
+				<a data-role="button" data-theme="f" data-icon="info" href="#dialog-about" data-rel="dialog" data-transition="pop">關於程式</a>
+			</div>
+		</footer>
+	</div>
+	<div data-role="dialog" id="dialog">
+		<div data-role="content">
+			<h1>資料已經丟到伺服器囉</h1>
+			<a data-role="button" data-rel="back">好哦</a>
+		</div>
+	</div>
+	<div data-role="dialog" id="dialog-about">
+		<div data-role="header">
+			<h1>關於程式</h1>
+		</div>
+		<div data-role="content">
+			<h1>NTUGEOG Sell System</h1>
+			<h2>designed by</h2>
+			<h2>Wayne Huang</h2>
+			<button href="https://www.facebook.com/Wayne.Huang.g">Facebook</button>
+			<button data-theme="b" href="mailto:wayne123tw@gmail.com">Email</button>
+			<a data-theme="d" data-role="button" data-rel="back">OK~</a>
+		</div>
+	</div>
+	<div data-role="page" id="set-inv" data-theme="f">
+		<header data-role="header">
+			<h1>庫存輸入</h1>
+		</header>
+		<div data-role="content">
+			<form>
+			<ul id="ul-enter-inv" data-role="listview" data-filter="true" data-filter-placeholder="搜尋">
+				<li class="list_title" data-role="list-divider">項目<div class="ui-li-count">庫存</div></li>
+			</ul>
+			</form>
+		</div>
+		<footer data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<div id="footer-div-enter-inv">
+				<a class="button-enter-inv" href="#" data-role="button" data-theme="d" data-transition="flip" data-direction="reverse" data-rel="back">OK</a>
+				<a class="button-enter-inv" href="#" data-role="button" data-theme="a" data-transition="flip" data-direction="reverse" data-rel="back">取消</a>
+			</div>
+		</footer>
+	</div>
+</body>
+</html>
