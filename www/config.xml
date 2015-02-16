@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <widget xmlns     = "http://www.w3.org/ns/widgets"
 		xmlns:gap = "http://phonegap.com/ns/1.0"
-		id        = "com.waynehuang.ntugeog.sellsystem"
+		id        = "com.waynehuang.ntugeogsellsystem"
 		version   = "1.0.0">
 
 	<name>NTU GEOG Sell System</name>
@@ -18,4 +18,3 @@
 
 	<icon src="icon.png"/>
 </widget>
-<gap:platform name="android" />
