@@ -55,6 +55,17 @@
 			background: #1abc9c;
 			border-color: #1abc9c;
 		}
+		.list-bottom {
+			text-align: right;
+			right: 30px;
+			background: #f9f9f9;
+			font-weight: 700;
+			font-size: 20px;
+			color: #000;
+			width: 100%;
+			height: 25px;
+			border-bottom: solid 1px #000;
+		}
 		.ui-li-link-alt-left {
 			left: 0;
 			right: auto;
@@ -66,8 +77,14 @@
 		.ui-listview>li.ui-li-has-alt>.ui-btn {
 			margin-right: 0;
 		}
+		.count-second {
+			right: 70px;
+		}
 		#dialog div h1 {
 			text-align: center;
+		}
+		#dialog div h2 {
+			margin-left: 20px;
 		}
 		#footer-div-enter-inv {
 			width: 90%;
@@ -94,8 +111,9 @@
 			<ul id="list_selected" data-role="listview" data-split-theme="b" data-split-icon="delete">
 
 			</ul>
+			<div class="list-bottom">總金額：<span>0</span> 元</div>
 			<ul id="list_inv" data-role="listview" data-filter="true" data-filter-placeholder="搜尋">
-				<li class="list_title" data-role="list-divider">項目<div class="ui-li-count">庫存</div></li>
+				<li class="list_title" data-role="list-divider">項目<div class="ui-li-count count-second">價格</div><div class="ui-li-count">庫存</div></li>
 			</ul>
 			<a id='submitted' href="#dialog" data-rel="dialog" data-transition="pop" style='display:none;'></a>
 		</div>
@@ -107,8 +125,12 @@
 			</div>
 		</footer>
 	</div>
+	<div data-role="dialog" id="login">
+
+	</div>
 	<div data-role="dialog" id="dialog">
 		<div data-role="content">
+			<h2>訂單編號：<span></span></h2>
 			<h1>資料已經丟到伺服器囉</h1>
 			<a data-role="button" data-rel="back">好哦</a>
 		</div>
