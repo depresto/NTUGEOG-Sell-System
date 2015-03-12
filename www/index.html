@@ -94,16 +94,25 @@
 			width: 90%;
 			margin-left: 5%;
 		}
-		.ui-input-text input {
-			text-align: right;
-		}
 		#dialog-about div h1,#dialog-about div h2 {
 			text-align: center;
+		}
+		#login h1 {
+			text-align: center;
+		}
+		#login button {
+			margin-top: 25px;
+		}
+		#error_msg {
+			display: none;
+			text-align: center;
+			color: red;
+			font-weight: 700;
 		}
 	</style>
 </head>
 <body>
-	<div data-role="page" >
+	<div data-role="page" id="main">
 		<header data-role="header">
 			<h1>地理週</h1>
 		</header>
@@ -125,8 +134,16 @@
 			</div>
 		</footer>
 	</div>
-	<div data-role="dialog" id="login">
-
+	<div data-role="page" id="login">
+		<div data-role="content">
+			<form action="">
+				<h1>請先登入</h1>
+				<input type="text" name="user" id="usr" placeholder="帳號">
+				<input type="password" name="pwd" id="pwd" placeholder="密碼">
+				<div id="error_msg">使用者或密碼錯誤</div>
+				<button href="#">登入</button>
+			</form>
+		</div>
 	</div>
 	<div data-role="dialog" id="dialog">
 		<div data-role="content">

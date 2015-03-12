@@ -4,8 +4,14 @@ var total_price = 0;
 var loc = 1;
 
 $(document).ready(function () {
-	//select product
+	//show login page
+	$.mobile.changePage('#login');
+	$('#login div form button').click(function(e){
+		e.preventDefault();
+		login($('#usr').val(), $('#pwd').val());
+	});
 
+	//location
 	var location;
 	switch(loc){
 			case 1: location = "蘭苑";
@@ -149,3 +155,19 @@ function setAll(arr,v) {
 		arr[i] = v;
 	}
 };
+
+function login(usr, pwd){
+	var url = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/dev";
+	data = {};
+	data['type'] = "login";
+	data['usr'] = usr;
+	data['pwd'] = pwd;
+	$.post(url, data, function(e){
+		if (e == "success"){
+			$.mobile.changePage('#main');
+			$('#error_msg').hide();
+		}
+		else
+			$('#error_msg').show();
+	});
+}
