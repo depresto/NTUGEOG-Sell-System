@@ -4,10 +4,22 @@ var total_price = 0;
 var loc = 1;
 
 $(document).ready(function () {
+
+	//refresh inv number per minute
+//	setInterval(function() {
+//		refreshInv();
+//	}, 1000 * 60 * 1);
+
 	//show login page
 	$.mobile.changePage('#login');
 	$('#login div form button').click(function(e){
 		e.preventDefault();
+		$.mobile.loading( 'show', {
+			text: '登入中',
+			textVisible: true,
+			theme: 'a',
+			html: ""
+		});
 		login($('#usr').val(), $('#pwd').val());
 	});
 
@@ -82,9 +94,10 @@ $(document).ready(function () {
 				item['price'+count] = product_data[i-1][3];
 				product_quentity[i] = 0;
 				count++;
-				//minus inv_count
 				product_id = i-1;
-				$('#inv'+product_id+' a div').text($('#inv'+product_id+' a div').text()-1);
+				product_num = $('#inv'+product_id+' .count-first').text() - 1;
+				$('#inv'+product_id+' .count-first').text(product_num);
+				$('#inv_'+product_id).val(product_num);
 			}
 		}
 		item['user'] = "test";
@@ -132,7 +145,7 @@ function showProduct(data){
 		$('#list_inv').append('<li id="inv'+i+'" class="li_inv" data-theme="c" data-icon="false">\
 			<a href="#">'+data[i][0]+data[i][1]+data[i][2]+'\
 				<div class="ui-li-count count-second">'+data[i][3]+'</div>\
-				<div class="ui-li-count">'+data[i][5]+'</div>\
+				<div class="ui-li-count count-first">'+data[i][5]+'</div>\
 			</a>\
 		</li>');
 		$('#ul-enter-inv').append('<li data-theme="d" data-role="fieldcontain">\
@@ -141,6 +154,30 @@ function showProduct(data){
 		</li>');
 	}
 	$('#list_inv').listview('refresh');
+}
+
+function refreshInv(){
+	console.log('refresh');
+	var url = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/dev?method=refresh_inv";
+	var local = "http://b03701118.lionfree.net/sell-system-ntugeog/get_inv.php";
+	$.getJSON(url, function (data) {
+		getInv(data);
+		console.log('Get inv data from server by google script.');
+	}).fail(function (e) {
+		$.getJSON(local, function (data) {
+			getInv(data);
+			console.log('Get inv data from server by local server.');
+		});
+	});
+}
+
+function getInv(data){
+	data_len = data.length;
+	for (i=0;i<data_len;i++){
+		$('#inv'+i+' .count-first').text(data[i]);
+		$('#inv_'+i).val(data[i]);
+		product_data[i][5] = data[i];
+	}
 }
 
 function sendData(data){
@@ -163,11 +200,15 @@ function login(usr, pwd){
 	data['usr'] = usr;
 	data['pwd'] = pwd;
 	$.post(url, data, function(e){
+		console.log(e);
 		if (e == "success"){
 			$.mobile.changePage('#main');
 			$('#error_msg').hide();
+			$.mobile.loading( 'hide');
 		}
-		else
+		else{
 			$('#error_msg').show();
+			$.mobile.loading( 'hide');
+		}
 	});
 }
