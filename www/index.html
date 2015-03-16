@@ -84,7 +84,7 @@
 			text-align: center;
 		}
 		#dialog div h2 {
-			margin-left: 20px;
+			text-align: center;
 		}
 		#footer-div-enter-inv {
 			width: 90%;
@@ -147,7 +147,7 @@
 	</div>
 	<div data-role="dialog" id="dialog">
 		<div data-role="content">
-			<h2>訂單編號：<span></span></h2>
+			<h2>訂單編號：<span>loading</span></h2>
 			<h1>資料已經丟到伺服器囉</h1>
 			<a data-role="button" data-rel="back">好哦</a>
 		</div>
@@ -178,7 +178,7 @@
 		</div>
 		<footer data-role="footer" data-position="fixed" data-tap-toggle="false">
 			<div id="footer-div-enter-inv">
-				<a class="button-enter-inv" href="#" data-role="button" data-theme="d" data-transition="flip" data-direction="reverse" data-rel="back">OK</a>
+				<a class="button-enter-inv" id="enter-inv" href="#" data-role="button" data-theme="d" data-transition="flip" data-direction="reverse" data-rel="back">OK</a>
 				<a class="button-enter-inv" href="#" data-role="button" data-theme="a" data-transition="flip" data-direction="reverse" data-rel="back">取消</a>
 			</div>
 		</footer>

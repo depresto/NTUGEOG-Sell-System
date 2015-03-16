@@ -9,6 +9,10 @@ var SELL_INDEX = [0,10,11,12]; //null 蘭苑售量	圖書館售量	活動中心�
 var PRICE_INDEX = 3; //賣價
 var PRODUCT_INDEX = [0,1,2]; //產品名稱
 
+var URL_POST = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec";
+var URL_GET = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=read_rows";
+var URL_REFRESH = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=refresh_inv";
+
 $(document).ready(function () {
 
 	//refresh inv number per minute
@@ -109,37 +113,34 @@ $(document).ready(function () {
 			}
 		}
 		item['user'] = user;
-		item['location'] = location;
+		item['loc_index'] = loc;
 		item['type'] = 'sold';
 		item['length'] = count;
+		$('#dialog div h2 span').text('loading');
 		sendData(item);
 		$('#list_selected').empty();
+		total_price = 0;
 		$('#submitted').click();
 	});
 
-	$('#button-enter-inv').click(function(){
-		submit =  $('form').serializeArray();
+	$('#enter-inv').click(function(){
 		data = {};
-		for (i=0 ; i<submit.length ; i++){
-			data['inv'+i] = submit[i]['value'];
+		for (i=0 ; i<product_data.length ; i++){
+			data['inv'+i] = $('#inv_'+i).val();
 		}
+		data['loc_index'] = loc;
 		data['type'] = 'enter_inv';
-		data['length'] = submit.length;
-		sendData(data);
+		data['length'] = product_data.length;
+		$.post(URL_POST ,data, function(e){
+			console.log(e);
+		});
 	});
 });
 
 function getData(){
-	var url = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=read_rows";
-	var local = "http://b03701118.lionfree.net/sell-system-ntugeog/get_inv.php";
-	$.getJSON(url, function (data) {
+	$.getJSON(URL_GET, function (data) {
 		showProduct(data);
 		console.log('Get data from server by google script.');
-	}).fail(function (e) {
-		$.getJSON(local, function (data) {
-			showProduct(data);
-			console.log('Get data from server by local server.');
-		});
 	});
 }
 
@@ -166,16 +167,8 @@ function showProduct(data){
 
 function refreshInv(){
 	console.log('refresh');
-	var url = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/dev?method=refresh_inv";
-	var local = "http://b03701118.lionfree.net/sell-system-ntugeog/get_inv.php";
-	$.getJSON(url, function (data) {
+	$.getJSON(URL_REFRESH, function (data) {
 		getInv(data);
-		console.log('Get inv data from server by google script.');
-	}).fail(function (e) {
-		$.getJSON(local, function (data) {
-			getInv(data);
-			console.log('Get inv data from server by local server.');
-		});
 	});
 }
 
@@ -189,9 +182,9 @@ function getInv(data){
 }
 
 function sendData(data){
-	var url = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/dev";
-	$.post(url,data, function(sell_num){
-		$('#dialog div h2 span').text(sell_num);
+	$.post(URL_POST,data, function(sell_num){
+		var order_index = zeroPad(sell_num,10000000);
+		$('#dialog div h2 span').text(order_index);
 	});
 }
 
@@ -201,13 +194,17 @@ function setAll(arr,v) {
 	}
 };
 
+function zeroPad(nr,base){
+	var  len = (String(base).length - String(nr).length)+1;
+	return len > 0? new Array(len).join('0')+nr : nr;
+}
+
 function login(usr, pwd){
-	var url = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/dev";
 	data = {};
 	data['type'] = "login";
 	data['usr'] = usr;
 	data['pwd'] = pwd;
-	$.post(url, data, function(e){
+	$.post(URL_POST, data, function(e){
 		console.log(e);
 		if (e == "success"){
 			$.mobile.changePage('#main');
