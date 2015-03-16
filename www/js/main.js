@@ -2,6 +2,12 @@ var product_quentity;
 var product_data;
 var total_price = 0;
 var loc = 1;
+var user;
+
+var INV_INDEX = [0,7,8,9,6]; //null 蘭苑存量	圖書館存量	活動中心存量	研究大樓存量
+var SELL_INDEX = [0,10,11,12]; //null 蘭苑售量	圖書館售量	活動中心售量
+var PRICE_INDEX = 3; //賣價
+var PRODUCT_INDEX = [0,1,2]; //產品名稱
 
 $(document).ready(function () {
 
@@ -32,14 +38,16 @@ $(document).ready(function () {
 					break;
 			case 3: location = "活動中心";
 					break;
+			case 4: location = "研究大樓";
+					break;
 	}
 	$('header h1').append('　<b>'+location+'</b>');
 
 	$('#list_inv').on('click','.li_inv',function(){
 		id = $(this).index();
 		select_num = ++product_quentity[id];
-		product_name = product_data[id-1][0]+product_data[id-1][1]+product_data[id-1][2]
-		product_price = product_data[id-1][3];
+		product_name = product_data[id-1][PRODUCT_INDEX[0]]+product_data[id-1][PRODUCT_INDEX[1]]+product_data[id-1][PRODUCT_INDEX[2]];
+		product_price = product_data[id-1][PRICE_INDEX];
 		if (select_num == 1){
 			$('#list_selected').append('<li class="li_selected" product-id="'+id+'"><a href="#" class="ul-li-has-alt-left">'+product_name+'<div class="ui-li-count">'+select_num+'</div></a><a href="#" class="ui-li-link-alt-left"></a></li>').listview('refresh');
 		}else{
@@ -55,7 +63,7 @@ $(document).ready(function () {
 		select_id = $(this).parent().attr('product-id');
 		select_num = --product_quentity[select_id];
 
-		product_price = product_data[select_id-1][3];
+		product_price = product_data[select_id-1][PRICE_INDEX];
 		total_price -= product_price;
 		$('.list-bottom span').text(total_price);
 
@@ -68,7 +76,7 @@ $(document).ready(function () {
 	//delete product
 	$('#list_selected').on('click','.ui-li-link-alt-left',function(){
 		select_id = $(this).parent().attr('product-id');
-		product_price = product_data[select_id-1][3];
+		product_price = product_data[select_id-1][PRICE_INDEX];
 
 		select_num = product_quentity[select_id];
 		total_price -= product_price * select_num;
@@ -87,11 +95,11 @@ $(document).ready(function () {
 		for (i=1 ; i<data_len ; i++){
 			if (product_quentity[i] != 0){
 				item['id'+count] = i;
-				item['name'+count] = product_data[i-1][0]+product_data[i-1][1]+product_data[i-1][2];
+				item['name'+count] = product_data[id-1][PRODUCT_INDEX[0]]+product_data[id-1][PRODUCT_INDEX[1]]+product_data[id-1][PRODUCT_INDEX[2]];
 				item['quentity'+count] = product_quentity[i];
 				item['date'+count] = d.getFullYear() + "/" + d.getMonth() + "/" + d.getDay();
 				item['time'+count] = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-				item['price'+count] = product_data[i-1][3];
+				item['price'+count] = product_data[i-1][PRICE_INDEX];
 				product_quentity[i] = 0;
 				count++;
 				product_id = i-1;
@@ -100,7 +108,7 @@ $(document).ready(function () {
 				$('#inv_'+product_id).val(product_num);
 			}
 		}
-		item['user'] = "test";
+		item['user'] = user;
 		item['location'] = location;
 		item['type'] = 'sold';
 		item['length'] = count;
@@ -143,14 +151,14 @@ function showProduct(data){
 	console.log('Row:'+data_len);
 	for (i=0;i<data_len;i++){
 		$('#list_inv').append('<li id="inv'+i+'" class="li_inv" data-theme="c" data-icon="false">\
-			<a href="#">'+data[i][0]+data[i][1]+data[i][2]+'\
-				<div class="ui-li-count count-second">'+data[i][3]+'</div>\
-				<div class="ui-li-count count-first">'+data[i][5]+'</div>\
+			<a href="#">'+data[i][PRODUCT_INDEX[0]]+data[i][PRODUCT_INDEX[1]]+data[i][PRODUCT_INDEX[2]]+'\
+				<div class="ui-li-count count-second">'+data[i][PRICE_INDEX]+'</div>\
+				<div class="ui-li-count count-first">'+data[i][INV_INDEX[loc]]+'</div>\
 			</a>\
 		</li>');
 		$('#ul-enter-inv').append('<li data-theme="d" data-role="fieldcontain">\
-			<label for="inv_'+i+'">'+data[i][0]+data[i][1]+data[i][2]+'</label>\
-			<input type="number" name="'+i+'" id="inv_'+i+'" value="'+data[i][5]+'"/>\
+			<label for="inv_'+i+'">'+data[i][PRODUCT_INDEX[0]]+data[i][PRODUCT_INDEX[1]]+data[i][PRODUCT_INDEX[2]]+'</label>\
+			<input type="number" name="'+i+'" id="inv_'+i+'" value="'+data[i][INV_INDEX[loc]]+'"/>\
 		</li>');
 	}
 	$('#list_inv').listview('refresh');
@@ -176,7 +184,7 @@ function getInv(data){
 	for (i=0;i<data_len;i++){
 		$('#inv'+i+' .count-first').text(data[i]);
 		$('#inv_'+i).val(data[i]);
-		product_data[i][5] = data[i];
+		product_data[i][INV_INDEX[loc]] = data[i];
 	}
 }
 
@@ -205,6 +213,7 @@ function login(usr, pwd){
 			$.mobile.changePage('#main');
 			$('#error_msg').hide();
 			$.mobile.loading( 'hide');
+			user = usr;
 		}
 		else{
 			$('#error_msg').show();
