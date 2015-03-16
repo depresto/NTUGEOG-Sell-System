@@ -16,9 +16,11 @@ var URL_REFRESH = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs
 $(document).ready(function () {
 
 	//refresh inv number per minute
-//	setInterval(function() {
-//		refreshInv();
-//	}, 1000 * 60 * 1);
+	if (loc != 4){
+		setInterval(function() {
+			refreshInv();
+		}, 1000 * 60 * 1);
+	}
 
 	//show login page
 	$.mobile.changePage('#login');
@@ -207,7 +209,11 @@ function login(usr, pwd){
 	$.post(URL_POST, data, function(e){
 		console.log(e);
 		if (e == "success"){
-			$.mobile.changePage('#main');
+			if (loc == 4){
+				$.mobile.changePage('#set-inv');
+			}else{
+				$.mobile.changePage('#main');
+			}
 			$('#error_msg').hide();
 			$.mobile.loading( 'hide');
 			user = usr;
