@@ -109,7 +109,7 @@ $(document).ready(function () {
 				product_quentity[i] = 0;
 				count++;
 				product_id = i-1;
-				product_num = $('#inv'+product_id+' .count-first').text() - 1;
+				product_num = $('#inv'+product_id+' .count-first').text() - product_quentity[i];
 				$('#inv'+product_id+' .count-first').text(product_num);
 				$('#inv_'+product_id).val(product_num);
 			}
