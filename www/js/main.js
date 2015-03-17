@@ -13,6 +13,8 @@ var URL_POST = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mG
 var URL_GET = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=read_rows";
 var URL_REFRESH = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=refresh_inv&loc_index=";
 
+var refresh = null;
+
 $(document).ready(function () {
 	//show login page
 	$.mobile.changePage('#login');
@@ -41,11 +43,7 @@ $(document).ready(function () {
 
 		login($('#usr').val(), $('#pwd').val());
 
-		if (loc != 4){
-			setRefresh(true);
-		}else{
-			setRefresh(false);
-		}
+		setRefresh(true);
 	});
 
 	$('#list_inv').on('click','.li_inv',function(){
@@ -219,12 +217,12 @@ function logout(){
 }
 
 function setRefresh(e){
-	//refresh inv number per minute
-	var refresh = setInterval(function() {
-		refreshInv();
-	}, 1000 * 60 * 1);
-
-	if (e == false){
+	if (e == true){
+		//refresh inv number per minute
+		refresh = setInterval(function() {
+			refreshInv();
+		}, 1000 * 60 * 1);
+	}else if (e == false){
 		clearInterval(refresh);
 	}
 }
