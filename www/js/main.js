@@ -27,6 +27,7 @@ $(document).ready(function () {
 			html: ""
 		});
 		loc = $('#select-location option:selected ').val();
+		$('#list_inv li').not('.list_title').remove();
 		getData();
 		var location;
 		switch(loc){
@@ -194,11 +195,7 @@ function login(usr, pwd){
 	$.post(URL_POST, data, function(e){
 		console.log(e);
 		if (e == "success"){
-			if (loc == 4){
-				$.mobile.changePage('#set-inv');
-			}else{
-				$.mobile.changePage('#main');
-			}
+			$.mobile.changePage('#main');
 			$('#error_msg').hide();
 			$.mobile.loading( 'hide');
 			user = usr;
@@ -212,7 +209,6 @@ function login(usr, pwd){
 
 function logout(){
 	$.mobile.changePage('#login');
-	$('#list_inv li').not('.list_title').remove();
 	setRefresh(false);
 }
 
