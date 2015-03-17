@@ -9,9 +9,6 @@
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
 	<script src="js/jquery.csv-0.71.min.js"></script>
 	<script src="js/main.js"></script>
-	<script type="text/javascript">
-		getData();
-	</script>
 	<style>
 		#sold {
 			width: 90%;
@@ -114,7 +111,9 @@
 <body>
 	<div data-role="page" id="main">
 		<header data-role="header">
-			<h1>地理週</h1>
+			<a data-role="button" data-theme="f" data-icon="info" href="#dialog-about" data-rel="dialog" data-transition="pop">關於程式</a>
+			<h1>地理週　<span></span></h1>
+			<a data-role="button" data-theme="f" data-icon="delete" href="#" onclick="logout()">登出</a>
 		</header>
 		<div data-role="content">
 			<ul id="list_selected" data-role="listview" data-split-theme="b" data-split-icon="delete">
@@ -128,10 +127,6 @@
 		</div>
 		<footer data-role="footer" data-position="fixed" data-tap-toggle="false">
 			<button id="sold" data-theme="d">售出</button>
-			<div id="button_bar" data-role="controlgroup" data-type="horizontal">
-				<a data-role="button" data-theme="f" data-icon="plus" href="#set-inv" data-transition="flip" id="footer-button-enter-inv">輸入庫存</a>
-				<a data-role="button" data-theme="f" data-icon="info" href="#dialog-about" data-rel="dialog" data-transition="pop">關於程式</a>
-			</div>
 		</footer>
 	</div>
 	<div data-role="page" id="login">
@@ -140,6 +135,15 @@
 				<h1>請先登入</h1>
 				<input type="text" name="user" id="usr" placeholder="帳號">
 				<input type="password" name="pwd" id="pwd" placeholder="密碼">
+				<div data-role="fieldcontain">
+					<label for="select-location" id="select-label">請選擇地點</label>
+					<select name="select-location" id="select-location" data-theme="b">
+						<option value="1">蘭苑</option>
+						<option value="2">圖書館</option>
+						<option value="3">活動中心</option>
+						<option value="4">研究大樓</option>
+					</select>
+				</div>
 				<div id="error_msg">使用者或密碼錯誤</div>
 				<button href="#">登入</button>
 			</form>
@@ -164,24 +168,6 @@
 			<button data-theme="b" href="mailto:wayne123tw@gmail.com">Email</button>
 			<a data-theme="d" data-role="button" data-rel="back">OK~</a>
 		</div>
-	</div>
-	<div data-role="page" id="set-inv" data-theme="f">
-		<header data-role="header">
-			<h1>庫存輸入</h1>
-		</header>
-		<div data-role="content">
-			<form>
-			<ul id="ul-enter-inv" data-role="listview" data-filter="true" data-filter-placeholder="搜尋">
-				<li class="list_title" data-role="list-divider">項目<div class="ui-li-count">庫存</div></li>
-			</ul>
-			</form>
-		</div>
-		<footer data-role="footer" data-position="fixed" data-tap-toggle="false">
-			<div id="footer-div-enter-inv">
-				<a class="button-enter-inv" id="enter-inv" href="#" data-role="button" data-theme="d" data-transition="flip" data-direction="reverse" data-rel="back">OK</a>
-				<a class="button-enter-inv" href="#" data-role="button" data-theme="a" data-transition="flip" data-direction="reverse" data-rel="back">取消</a>
-			</div>
-		</footer>
 	</div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 var product_quentity;
 var product_data;
 var total_price = 0;
-var loc = 1;
+var loc;
 var user;
 
 var INV_INDEX = [0,7,8,9,6]; //null 蘭苑存量	圖書館存量	活動中心存量	研究大樓存量
@@ -11,17 +11,9 @@ var PRODUCT_INDEX = [0,1,2]; //產品名稱
 
 var URL_POST = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec";
 var URL_GET = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=read_rows";
-var URL_REFRESH = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=refresh_inv";
+var URL_REFRESH = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=refresh_inv&loc_index=";
 
 $(document).ready(function () {
-
-	//refresh inv number per minute
-	if (loc != 4){
-		setInterval(function() {
-			refreshInv();
-		}, 1000 * 60 * 1);
-	}
-
 	//show login page
 	$.mobile.changePage('#login');
 	$('#login div form button').click(function(e){
@@ -32,22 +24,29 @@ $(document).ready(function () {
 			theme: 'a',
 			html: ""
 		});
-		login($('#usr').val(), $('#pwd').val());
-	});
+		loc = $('#select-location option:selected ').val();
+		getData();
+		var location;
+		switch(loc){
+			case '1': location = "蘭苑";
+					break;
+			case '2': location = "圖書館";
+					break;
+			case '3': location = "活動中心";
+					break;
+			case '4': location = "研究大樓";
+					break;
+		}
+		$('header h1 span').text(location);
 
-	//location
-	var location;
-	switch(loc){
-			case 1: location = "蘭苑";
-					break;
-			case 2: location = "圖書館";
-					break;
-			case 3: location = "活動中心";
-					break;
-			case 4: location = "研究大樓";
-					break;
-	}
-	$('header h1').append('　<b>'+location+'</b>');
+		login($('#usr').val(), $('#pwd').val());
+
+		if (loc != 4){
+			setRefresh(true);
+		}else{
+			setRefresh(false);
+		}
+	});
 
 	$('#list_inv').on('click','.li_inv',function(){
 		id = $(this).index();
@@ -125,19 +124,6 @@ $(document).ready(function () {
 		$('.list-bottom span').text(total_price);
 		$('#submitted').click();
 	});
-
-	$('#enter-inv').click(function(){
-		data = {};
-		for (i=0 ; i<product_data.length ; i++){
-			data['inv'+i] = $('#inv_'+i).val();
-		}
-		data['loc_index'] = loc;
-		data['type'] = 'enter_inv';
-		data['length'] = product_data.length;
-		$.post(URL_POST ,data, function(e){
-			console.log(e);
-		});
-	});
 });
 
 function getData(){
@@ -170,7 +156,7 @@ function showProduct(data){
 
 function refreshInv(){
 	console.log('refresh');
-	$.getJSON(URL_REFRESH, function (data) {
+	$.getJSON(URL_REFRESH+loc, function (data) {
 		getInv(data);
 	});
 }
@@ -224,4 +210,21 @@ function login(usr, pwd){
 			$.mobile.loading( 'hide');
 		}
 	});
+}
+
+function logout(){
+	$.mobile.changePage('#login');
+	$('#list_inv li').not('.list_title').remove();
+	setRefresh(false);
+}
+
+function setRefresh(e){
+	//refresh inv number per minute
+	var refresh = setInterval(function() {
+		refreshInv();
+	}, 1000 * 60 * 1);
+
+	if (e == false){
+		clearInterval(refresh);
+	}
 }
