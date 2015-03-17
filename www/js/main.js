@@ -106,12 +106,12 @@ $(document).ready(function () {
 				item['date'+count] = d.getFullYear() + "/" + d.getMonth() + "/" + d.getDay();
 				item['time'+count] = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 				item['price'+count] = product_data[i-1][PRICE_INDEX];
-				product_quentity[i] = 0;
-				count++;
 				product_id = i-1;
 				product_num = $('#inv'+product_id+' .count-first').text() - product_quentity[i];
 				$('#inv'+product_id+' .count-first').text(product_num);
 				$('#inv_'+product_id).val(product_num);
+				product_quentity[i] = 0;
+				count++;
 			}
 		}
 		item['user'] = user;
