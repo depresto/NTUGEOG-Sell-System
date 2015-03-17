@@ -122,6 +122,7 @@ $(document).ready(function () {
 		sendData(item);
 		$('#list_selected').empty();
 		total_price = 0;
+		$('.list-bottom span').text(total_price);
 		$('#submitted').click();
 	});
 
