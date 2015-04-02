@@ -99,7 +99,7 @@ $(document).ready(function () {
 		for (i=1 ; i<data_len ; i++){
 			if (product_quentity[i] != 0){
 				item['id'+count] = i;
-				item['name'+count] = product_data[id-1][PRODUCT_INDEX[0]]+product_data[id-1][PRODUCT_INDEX[1]]+product_data[id-1][PRODUCT_INDEX[2]];
+				item['name'+count] = product_data[i-1][PRODUCT_INDEX[0]]+product_data[i-1][PRODUCT_INDEX[1]]+product_data[i-1][PRODUCT_INDEX[2]];
 				item['quentity'+count] = product_quentity[i];
 				item['date'+count] = d.getFullYear() + "/" + d.getMonth() + "/" + d.getDay();
 				item['time'+count] = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
