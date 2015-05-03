@@ -145,10 +145,6 @@ function showProduct(data){
 				<div class="ui-li-count count-first">'+data[i][INV_INDEX[loc]]+'</div>\
 			</a>\
 		</li>');
-		$('#ul-enter-inv').append('<li data-theme="d" data-role="fieldcontain">\
-			<label for="inv_'+i+'">'+data[i][PRODUCT_INDEX[0]]+data[i][PRODUCT_INDEX[1]]+data[i][PRODUCT_INDEX[2]]+'</label>\
-			<input type="number" name="'+i+'" id="inv_'+i+'" value="'+data[i][INV_INDEX[loc]]+'"/>\
-		</li>');
 	}
 	$('#list_inv').listview('refresh');
 }
