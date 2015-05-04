@@ -9,7 +9,7 @@ var SELL_INDEX = [0,10,11,12]; //null 蘭苑售量	圖書館售量	活動中心�
 var PRICE_INDEX = 3; //賣價
 var PRODUCT_INDEX = [0,1,2]; //產品名稱
 
-var URL_POST = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec";
+var URL_POST = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/dev";
 var URL_GET = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=read_rows";
 var URL_REFRESH = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs5mGvlXoR3PNoiXEAFlyYw/exec?method=refresh_inv&loc_index=";
 
@@ -134,14 +134,17 @@ $(document).ready(function () {
 			$('#footer-div-enter-inv span').hide();
 			submit =  $('#form-enter-inv').serializeArray();
 			data = {};
-			data['type'] = 'move';
-			data['inv_move'] = move_loc;
+			data['type'] = 'move_inv';
+			data['move_loc'] = move_loc;
 			for (i=0 ; i<submit.length ; i++){
 				data['inv'+i] = submit[i]['value'];
 			}
+			data['length'] = submit.length;
 //			console.log(data);
 			$('#dialog div h2 span').text('loading');
-			sendData(item);
+			$.post(URL_POST,data, function(sell_num){
+				$('#dialog div h2 span').text(sell_num);
+			});
 			$('#inv-submitted').click();
 		}else
 			$('#footer-div-enter-inv span').show();
