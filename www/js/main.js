@@ -15,6 +15,10 @@ var URL_REFRESH = "https://script.google.com/macros/s/AKfycbwqmPD8aeeHt1nwt7avVs
 
 var refresh = null;
 
+$(document).bind("mobileinit", function(){
+	$.mobile.pushStateEnabled = false;
+});
+
 $(document).ready(function () {
 	//show login page
 	$.mobile.changePage('#login');
@@ -28,7 +32,7 @@ $(document).ready(function () {
 		});
 		loc = $('#select-location option:selected ').val();
 		$('#list_inv li').not('.list_title').remove();
-		getData();
+
 		var location;
 		switch(loc){
 			case '1': location = "蘭苑";
@@ -42,9 +46,9 @@ $(document).ready(function () {
 		}
 		$('header h1 span').text(location);
 
-		login($('#usr').val(), $('#pwd').val());
+		getData();
 
-		setRefresh(true);
+		login($('#usr').val(), $('#pwd').val());
 	});
 
 	$('#list_inv').on('click','.li_inv',function(){
@@ -101,7 +105,7 @@ $(document).ready(function () {
 				item['id'+count] = i;
 				item['name'+count] = product_data[i-1][PRODUCT_INDEX[0]]+product_data[i-1][PRODUCT_INDEX[1]]+product_data[i-1][PRODUCT_INDEX[2]];
 				item['quentity'+count] = product_quentity[i];
-				item['date'+count] = d.getFullYear() + "/" + d.getMonth() + "/" + d.getDay();
+				item['date'+count] = d.getFullYear() + "/" + (d.getMonth() +1) + "/" + d.getDate();
 				item['time'+count] = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 				item['price'+count] = product_data[i-1][PRICE_INDEX];
 				product_id = i-1;
@@ -123,11 +127,33 @@ $(document).ready(function () {
 		$('.list-bottom span').text(total_price);
 		$('#submitted').click();
 	});
+
+	$('.button-enter-inv').click(function(){
+		move_loc = $('#fieldset-inv :radio:checked').val();
+		if (move_loc != null){
+			$('#footer-div-enter-inv span').hide();
+			submit =  $('#form-enter-inv').serializeArray();
+			data = {};
+			data['type'] = 'move';
+			data['inv_move'] = move_loc;
+			for (i=0 ; i<submit.length ; i++){
+				data['inv'+i] = submit[i]['value'];
+			}
+//			console.log(data);
+			$('#dialog div h2 span').text('loading');
+			sendData(item);
+			$('#inv-submitted').click();
+		}else
+			$('#footer-div-enter-inv span').show();
+	});
 });
 
 function getData(){
 	$.getJSON(URL_GET, function (data) {
-		showProduct(data);
+		if (loc != 4)
+			showProduct(data);
+		else
+			showInv(data);
 		console.log('Get data from server by google script.');
 	});
 }
@@ -138,6 +164,7 @@ function showProduct(data){
 	product_quentity = new Array(data_len+1);
 	setAll(product_quentity,0);
 	console.log('Row:'+data_len);
+	$('.li_inv').remove();
 	for (i=0;i<data_len;i++){
 		$('#list_inv').append('<li id="inv'+i+'" class="li_inv" data-theme="c" data-icon="false">\
 			<a href="#">'+data[i][PRODUCT_INDEX[0]]+data[i][PRODUCT_INDEX[1]]+data[i][PRODUCT_INDEX[2]]+'\
@@ -146,7 +173,21 @@ function showProduct(data){
 			</a>\
 		</li>');
 	}
-	$('#list_inv').listview('refresh');
+}
+
+function showInv(data){
+	product_data = data;
+	data_len = data.length;
+	product_quentity = new Array(data_len+1);
+	setAll(product_quentity,0);
+	console.log('Row:'+data_len);
+	$('.li_enter_inv').remove();
+	for (i=0;i<data_len;i++){
+		$('#ul-enter-inv').append('<li class="li_enter_inv" data-theme="d" data-role="fieldcontain">\
+			<label for="inv_'+i+'">'+data[i][PRODUCT_INDEX[0]]+data[i][PRODUCT_INDEX[1]]+data[i][PRODUCT_INDEX[2]]+'</label>\
+			<input type="number" name="'+i+'" id="inv_'+i+'" value="0"/>\
+		</li>');
+	}
 }
 
 function refreshInv(){
@@ -191,7 +232,20 @@ function login(usr, pwd){
 	$.post(URL_POST, data, function(e){
 		console.log(e);
 		if (e == "success"){
-			$.mobile.changePage('#main');
+			if (loc != 4){
+				$.mobile.changePage('#main');
+				setRefresh(true);
+			}else
+				$.mobile.changePage('#set-inv');
+
+			var list;
+			if (loc != 4)
+				list = $('#list_inv');
+			else
+				list = $('#ul-enter-inv');
+			list.listview('refresh');
+			console.log('list refresh');
+
 			$('#error_msg').hide();
 			$.mobile.loading( 'hide');
 			user = usr;
